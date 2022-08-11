@@ -41,6 +41,7 @@ public class LoginController {
     @CrossOrigin(origins = {"http://localhost:3000"})
     @PostMapping("/signin")
     public ResponseEntity<String> signin(@RequestParam("email") String email,@RequestParam("password") String password) {
+        System.out.println(email);
         return ResponseEntity.ok(accountService.signin(email, password));
     }
 
