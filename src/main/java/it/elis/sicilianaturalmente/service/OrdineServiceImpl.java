@@ -3,6 +3,7 @@ package it.elis.sicilianaturalmente.service;
 import it.elis.sicilianaturalmente.exception.CustomException;
 import it.elis.sicilianaturalmente.model.*;
 import it.elis.sicilianaturalmente.repository.AccountRepository;
+import it.elis.sicilianaturalmente.repository.OrdineProdottoRepository;
 import it.elis.sicilianaturalmente.repository.OrdineRepository;
 import it.elis.sicilianaturalmente.repository.ProdottoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,14 @@ import java.util.Optional;
 
 @Service
 public class OrdineServiceImpl implements OrdineService{
-
     @Autowired
     OrdineRepository ordineRepository;
 
     @Autowired
     ProdottoRepository prodottoRepository;
+
+    @Autowired
+    OrdineProdottoRepository ordineProdottoRepository;
 
     @Autowired
     AccountService accountService;
@@ -51,13 +54,19 @@ public class OrdineServiceImpl implements OrdineService{
                 .setStato(Stato.IN_PREPARAZIONE);
         ordine = ordineRepository.save(ordine);
 
+        List<OrdineProdotti> prodotti = new ArrayList<>();
         Prodotto prodotto;
+        Long quantita;
         for (int i=0; i<paymentData.getProducts().size();i++) {
             prodotto = prodottoRepository.findByTitolo(paymentData.getProducts().get(i).getTitolo()).get();
+            quantita = Long.valueOf(paymentData.getProducts().get(i).getQuantita());
             if(prodotto.getDeleted()){
                 throw new CustomException("The product "+prodotto.getTitolo()+" is not available", HttpStatus.NOT_FOUND);
             }
-
+            OrdineProdotti ordineProdotti = new OrdineProdotti().setProdotto(prodotto).setQuantita(quantita);
+            prodotti.add(ordineProdotti);
+            ordineProdotti.setOrdine(ordine);
+            ordineProdottoRepository.save(ordineProdotti);
 
         }
 
@@ -79,8 +88,14 @@ public class OrdineServiceImpl implements OrdineService{
             throw new CustomException("There is no order with this id", HttpStatus.NOT_FOUND);
         }
         if(isOrderUser(idOrdine)){
+            List<OrdineProdotti> ordineList = ordineProdottoRepository.findByOrdine(ordine.get());
             List<ContenutoProdotto> contenutoProdotto = new ArrayList<>();
-
+            for(int i =0; i<ordineList.size();i++){
+                ContenutoProdotto prodotto=new ContenutoProdotto();
+                prodotto.setTitolo(ordineList.get(i).getProdotto().getTitolo())
+                        .setQuantita(ordineList.get(i).getQuantita());
+                contenutoProdotto.add(prodotto);
+            }
             return contenutoProdotto;
         }
         throw new CustomException("The user does not have an order with this id", HttpStatus.NOT_FOUND);
