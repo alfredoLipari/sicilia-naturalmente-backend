@@ -115,6 +115,7 @@ public class AccountServiceImpl implements AccountService {
     public String signin(String email, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            System.out.println(Collections.singletonList(accountRepository.findByEmail(email).get().getRuolo()));
             return jwtTokenProvider.createToken(email, Collections.singletonList(accountRepository.findByEmail(email).get().getRuolo()));
         } catch (AuthenticationException e) {
             throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
