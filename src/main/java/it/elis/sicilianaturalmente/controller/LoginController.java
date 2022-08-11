@@ -42,6 +42,7 @@ public class LoginController {
     @PostMapping("/signin")
     public ResponseEntity<String> signin(@RequestParam("email") String email,@RequestParam("password") String password) {
         System.out.println(email);
+        System.out.println(password);
         return ResponseEntity.ok(accountService.signin(email, password));
     }
 
