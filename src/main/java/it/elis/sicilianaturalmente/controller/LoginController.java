@@ -43,6 +43,7 @@ public class LoginController {
     public ResponseEntity<String> signin(@RequestParam("email") String email,@RequestParam("password") String password) {
         System.out.println(email);
         System.out.println(password);
+        System.out.println("lol");
         return ResponseEntity.ok(accountService.signin(email, password));
     }
 
