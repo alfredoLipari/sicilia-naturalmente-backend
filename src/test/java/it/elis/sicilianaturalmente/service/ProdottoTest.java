@@ -2,7 +2,6 @@ package it.elis.sicilianaturalmente.service;
 
 import it.elis.sicilianaturalmente.model.Formato;
 import it.elis.sicilianaturalmente.model.Prodotto;
-import it.elis.sicilianaturalmente.repository.OrdineProdottoRepository;
 import it.elis.sicilianaturalmente.repository.OrdineRepository;
 import it.elis.sicilianaturalmente.repository.ProdottoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,10 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -35,9 +31,6 @@ public class ProdottoTest {
     ProdottoService prodottoService;
 
     @Autowired
-    OrdineProdottoRepository ordineProdottoRepository;
-
-    @Autowired
     OrdineRepository ordineRepository;
 
     @Autowired
@@ -50,7 +43,6 @@ public class ProdottoTest {
 
     @BeforeEach
     public void beforeEach() {
-        ordineProdottoRepository.deleteAll();
         ordineRepository.deleteAll();
         prodottoRepository.deleteAll();
     }

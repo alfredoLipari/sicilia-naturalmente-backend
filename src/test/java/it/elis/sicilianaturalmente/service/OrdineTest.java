@@ -3,7 +3,6 @@ package it.elis.sicilianaturalmente.service;
 import it.elis.sicilianaturalmente.model.PaymentData;
 import it.elis.sicilianaturalmente.model.Prodotto;
 import it.elis.sicilianaturalmente.model.Stato;
-import it.elis.sicilianaturalmente.repository.OrdineProdottoRepository;
 import it.elis.sicilianaturalmente.repository.OrdineRepository;
 import it.elis.sicilianaturalmente.repository.ProdottoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +35,6 @@ public class OrdineTest {
     @Autowired
     ProdottoRepository prodottoRepository;
 
-    @Autowired
-    OrdineProdottoRepository ordineProdottoRepository;
 
     @Autowired
     OrdineRepository ordineRepository;
@@ -48,7 +45,6 @@ public class OrdineTest {
 
     @BeforeEach
     public void beforeEach() {
-        ordineProdottoRepository.deleteAll();
         ordineRepository.deleteAll();
         prodottoRepository.deleteAll();
     }
